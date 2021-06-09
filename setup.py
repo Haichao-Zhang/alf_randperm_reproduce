@@ -42,10 +42,10 @@ setup(
         'sphinx==2.4.4',
         'sphinxcontrib-napoleon==0.7',
         'sphinx-rtd-theme==0.4.3',  # used to build html docs locally
-        'tensorboard == 2.1.0',
-        'torch == 1.8.1',
-        'torchvision == 0.9.1',
-        'torchtext == 0.9.1',
+        'tensorboard == 2.1.0'
+        #'torch == 1.8.1',
+        #'torchvision == 0.9.1',
+        #'torchtext == 0.9.1',
     ],  # And any other dependencies alf needs
     package_data={'': ['*.gin']},
     packages=find_packages(),

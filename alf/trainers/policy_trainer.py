@@ -139,37 +139,37 @@ class Trainer(object):
             signal.SIGUSR1), os.getpid()))
 
         checkpoint_saved = False
-        try:
-            if self._config.profiling:
-                import cProfile, pstats, io
-                pr = cProfile.Profile()
-                pr.enable()
+        # try:
+        if self._config.profiling:
+            import cProfile, pstats, io
+            pr = cProfile.Profile()
+            pr.enable()
 
-            common.run_under_record_context(
-                self._train,
-                summary_dir=self._train_dir,
-                summary_interval=self._summary_interval,
-                flush_secs=self._summaries_flush_secs,
-                summary_max_queue=self._summary_max_queue)
+        common.run_under_record_context(
+            self._train,
+            summary_dir=self._train_dir,
+            summary_interval=self._summary_interval,
+            flush_secs=self._summaries_flush_secs,
+            summary_max_queue=self._summary_max_queue)
 
-            if self._config.profiling:
-                pr.disable()
-                s = io.StringIO()
-                ps = pstats.Stats(pr, stream=s).sort_stats('time')
-                ps.print_stats()
-                ps = pstats.Stats(pr, stream=s).sort_stats('cumulative')
-                ps.print_stats()
-                ps.print_callees()
+        if self._config.profiling:
+            pr.disable()
+            s = io.StringIO()
+            ps = pstats.Stats(pr, stream=s).sort_stats('time')
+            ps.print_stats()
+            ps = pstats.Stats(pr, stream=s).sort_stats('cumulative')
+            ps.print_stats()
+            ps.print_callees()
 
-                logging.info(s.getvalue())
-            self._save_checkpoint()
-            checkpoint_saved = True
-        finally:
-            if self._config.confirm_checkpoint_upon_crash and not checkpoint_saved:
-                ans = input("Do you want to save checkpoint? (y/n): ")
-                if ans.lower().startswith('y'):
-                    self._save_checkpoint()
-            self._close()
+            logging.info(s.getvalue())
+        self._save_checkpoint()
+        checkpoint_saved = True
+        # finally:
+        #     if self._config.confirm_checkpoint_upon_crash and not checkpoint_saved:
+        #         ans = input("Do you want to save checkpoint? (y/n): ")
+        #         if ans.lower().startswith('y'):
+        #             self._save_checkpoint()
+        #     self._close()
 
     @staticmethod
     def progress():
